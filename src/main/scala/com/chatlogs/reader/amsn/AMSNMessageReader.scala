@@ -10,7 +10,7 @@ import com.chatlogs.core.{Session, Message, MessageReader}
  * Version: 1.0.0
  */
 
-class AMSNMessageReader(file: String) extends MessageReader {
+class AMSNMessageReader(target: String) extends MessageReader {
   def sessions(): List[Session] = {
     val messages = loadMessagesFrom()
     var sessions: List[Session] = Nil
@@ -34,14 +34,14 @@ class AMSNMessageReader(file: String) extends MessageReader {
 
   def loadMessagesFrom(): List[Message] = {
     try {
-      val messages = convertMessageFromSource()
+      val messages = convertMessageFromSource(target)
       zipMessages(messages)
     } catch {
       case e: Exception => Nil
     }
   }
 
-  private def convertMessageFromSource(): List[Message] = {
+  private def convertMessageFromSource(targetFile: String): List[Message] = {
     val sessionOpen = """\|\"LRED\[Conversation started on \|\"LTIME(\d*)\]""".r
     val conferenceOpen = """\|\"LRED\[(.*) has entered into a conference on \|\"LTIME(\d*)(.*)\]""".r
     val chat = """\|\"LGRA\[\|\"LTIME(\d*) \] \|\"LITA(.*) :\|\"LC(\w*) (.*)""".r
@@ -49,7 +49,7 @@ class AMSNMessageReader(file: String) extends MessageReader {
     val sessionClose = """\|\"LRED\[You have closed the window on (.*)\]""".r
     val conferenceClose = """\|\"LRED\[(.*) has closed the window on (.*)\]""".r
     val emptyList = """^\s*$""".r
-    Source.fromInputStream(file).getLines().flatMap(
+    Source.fromInputStream(targetFile).getLines().flatMap(
       line => line match {
         case sessionOpen(time) => List(new AMSNSessionOpenMessage(time))
         case conferenceOpen(from, time, content) => List(new AMSNSessionOpenMessage(time, from, content))
