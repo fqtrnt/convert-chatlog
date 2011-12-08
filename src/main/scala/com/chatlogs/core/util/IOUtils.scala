@@ -3,7 +3,7 @@ package com.chatlogs.core.util
 import java.io.{FileInputStream, InputStream}
 
 /**
- *
+ * This utility of IO process.<br>
  * User: fqtrnt [2011/12/01]
  * Version: 1.0.0
  */

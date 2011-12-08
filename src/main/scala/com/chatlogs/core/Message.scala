@@ -1,11 +1,11 @@
 package com.chatlogs.core
 
-import java.sql.Timestamp
 import java.util.{Calendar, Date}
 import java.text.SimpleDateFormat
 
 /**
- *
+ * Trait of the Chat message.<br>
+ * It defined the base attribute and behavior on message access.
  * User: fqtrnt [2011/11/23]
  * Version: 1.0.0
  */
@@ -19,6 +19,14 @@ trait Message {
 
 }
 
+/**
+ *  This utility converts message time of String to {@link MessageTimestamp}.
+ *  The valid formats is:
+ *  1. 01 Nov 2011 18:00:00
+ *  2. 2011-11-01'T'18:00:00.123
+ *  3. 1320118776
+ *  4. 1320118776000
+ */
 object MessageTimestamp {
   val dataPattern1 = """\d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2}""".r
   val datePattern2 = """(\d{4})-(\d{2})-(\d{2})'T'(\d{2}):(\d{2}):(\d{2}).(\d{3})""".r
