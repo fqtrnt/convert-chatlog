@@ -14,7 +14,7 @@ import com.chatlogs.core.Session
 class AMSNMessageReaderTest extends Spec with ShouldMatchers {
 
   describe("aMSN log") {
-    val fileName = "classpath://amsn/aaa632@hotmail.com.log"
+    val fileName = "./src/test/resources/amsn/aaa632@hotmail.com.log"
     it("should only have 3 sessions in [" + fileName + "] and spokesmans are allright") {
       val messageReader: MessageReader = new AMSNMessageReader(fileName)
       val sessions: List[Session] = messageReader.sessions()
