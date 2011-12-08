@@ -12,7 +12,7 @@ import com.chatlogs.core.{Session, Message, MessageReader}
 
 class AMSNMessageReader(target: String) extends MessageReader {
   def sessions(): List[Session] = {
-    val messages = loadMessagesFrom()
+    val messages = loadMessagesFrom(target.excavate.toList)
     var sessions: List[Session] = Nil
     var sessionId = 0
     messages.foldLeft (new Session(sessionId)) {
@@ -32,9 +32,9 @@ class AMSNMessageReader(target: String) extends MessageReader {
     sessions.reverse
   }
 
-  def loadMessagesFrom(): List[Message] = {
+  def loadMessagesFrom(filePaths: List[String]): List[Message] = {
     try {
-      val messages = convertMessageFromSource(target)
+      val messages = filePaths flatMap convertMessageFromSource
       zipMessages(messages)
     } catch {
       case e: Exception => Nil

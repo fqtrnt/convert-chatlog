@@ -33,7 +33,7 @@ class AMSNMessageReaderTest extends Spec with ShouldMatchers {
     }
 
     val reader = new AMSNMessageReader(fileName)
-    val messages = reader.loadMessagesFrom()
+    val messages = reader.loadMessagesFrom(List(fileName))
     it("should get 40 messages from [" + fileName + "]") {
       messages should not be null
       messages should not be 'empty
