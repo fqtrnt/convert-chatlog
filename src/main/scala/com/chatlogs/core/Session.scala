@@ -6,7 +6,7 @@ package com.chatlogs.core
  * Version: 1.0.0
  */
 
-class Session(sessionId: Int) {
+class Session(val sessionId: Int, val identifier: String) {
   var messages: List[Message] = Nil
 
   def interlocutor: Interlocutor = messages.foldLeft(new Interlocutor) {
@@ -26,7 +26,7 @@ class Session(sessionId: Int) {
     this
   }
 
-  override def toString = String.valueOf(sessionId)
+  override def toString = identifier + "  " + sessionId
 }
 
 import scala.collection.mutable.Set

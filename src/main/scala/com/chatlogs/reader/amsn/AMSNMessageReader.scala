@@ -10,18 +10,18 @@ import com.chatlogs.core.{Session, Message, MessageReader}
  * Version: 1.0.0
  */
 
-class AMSNMessageReader(target: String) extends MessageReader {
+class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends MessageReader {
   def sessions(): List[Session] = {
-    val messages = loadMessagesFrom(target.excavate.toList)
+    val messages = loadMessagesFrom(target.excavate.filter(_.endsWith(sessionIdentifier)).toList)
     var sessions: List[Session] = Nil
     var sessionId = 0
-    messages.foldLeft (new Session(sessionId)) {
+    messages.foldLeft (new Session(sessionId, sessionIdentifier)) {
       (session, message) => {
         var retSession = session
         message match {
           case x: AMSNSessionOpenMessage => {
             sessionId += 1
-            retSession = new Session(sessionId)
+            retSession = new Session(sessionId, sessionIdentifier)
             sessions ::= retSession
           }
           case _ => null
@@ -32,7 +32,7 @@ class AMSNMessageReader(target: String) extends MessageReader {
     sessions.reverse
   }
 
-  def loadMessagesFrom(filePaths: List[String]): List[Message] = {
+  private def loadMessagesFrom(filePaths: List[String]): List[Message] = {
     try {
       val messages = filePaths flatMap convertMessageFromSource
       zipMessages(messages)
