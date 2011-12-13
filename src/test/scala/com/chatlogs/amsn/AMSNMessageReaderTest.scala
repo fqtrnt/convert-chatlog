@@ -1,4 +1,4 @@
-package com.chatlogs.reader.amsn
+package com.chatlogs.amsn
 
 import org.scalatest.Spec
 import com.chatlogs.core.MessageReader

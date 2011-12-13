@@ -1,4 +1,4 @@
-package com.chatlogs.reader.amsn
+package com.chatlogs.amsn
 
 import com.chatlogs.core.util.IOUtils._
 import io.Source
@@ -42,6 +42,7 @@ class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends M
   }
 
   private def convertMessageFromSource(targetFile: String): List[Message] = {
+    // TODO Offline session open
     val sessionOpen = """\|\"LRED\[Conversation started on \|\"LTIME(\d*)\]""".r
     val conferenceOpen = """\|\"LRED\[(.*) has entered into a conference on \|\"LTIME(\d*)(.*)\]""".r
     val chat = """\|\"LGRA\[\|\"LTIME(\d*) \] \|\"LITA(.*) :\|\"LC(\w*) (.*)""".r

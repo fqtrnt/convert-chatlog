@@ -1,4 +1,4 @@
-package com.chatlogs.reader.amsn
+package com.chatlogs.amsn
 
 import com.chatlogs.core.{MessageType, Message, MessageTimestamp}
 
