@@ -29,7 +29,7 @@ class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends M
         retSession + message
       }
     }
-    sessions.reverse
+    sessions.sortBy(_.messages(0).datetime)
   }
 
   private def loadMessagesFrom(filePaths: List[String]): List[Message] = {

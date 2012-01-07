@@ -38,7 +38,7 @@ object MessageTimestamp {
 }
 
 import  MessageTimestamp._
-class MessageTimestamp(timeString: String) {
+class MessageTimestamp(timeString: String) extends Ordered[MessageTimestamp] {
   (if (null == timeString) "" else timeString.trim) match {
     case datePattern3(x) => time = new Date(x.toLong * 1000)
     case datePattern4(x) => time = new Date(x.toLong)
@@ -61,4 +61,5 @@ class MessageTimestamp(timeString: String) {
   var time: Date = _
 
   override def toString = format2.format(time)
+  def compare(that: MessageTimestamp) = if (null == that) 1 else this.time.compareTo(that.time)
 }
