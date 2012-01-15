@@ -3,6 +3,7 @@ package com.chatlogs.amsn
 import com.chatlogs.core.util.IOUtils._
 import io.Source
 import com.chatlogs.core.{Session, Message, MessageReader}
+import scala.io.Codec
 
 /**
  *
@@ -50,7 +51,7 @@ class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends M
     val sessionClose = """\|\"LRED\[You have closed the window on (.*)\]""".r
     val conferenceClose = """\|\"LRED\[(.*) has closed the window on (.*)\]""".r
     val emptyList = """^\s*$""".r
-    Source.fromInputStream(targetFile).getLines().flatMap(
+    Source.fromInputStream(targetFile, Codec.UTF8.name).getLines().flatMap(
       line => line match {
         case sessionOpen(time) => List(new AMSNSessionOpenMessage(time))
         case conferenceOpen(from, time, content) => List(new AMSNSessionOpenMessage(time, from, content))
