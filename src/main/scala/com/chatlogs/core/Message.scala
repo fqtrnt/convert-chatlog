@@ -29,7 +29,7 @@ trait Message {
  */
 object MessageTimestamp {
   val dataPattern1 = """\d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2}""".r
-  val datePattern2 = """(\d{4})-(\d{2})-(\d{2})'T'(\d{2}):(\d{2}):(\d{2}).(\d{3})""".r
+  val datePattern2 = """(\d{4})-(\d{2})-(\d{2})['T]*(\d{2}):(\d{2}):(\d{2}).(\d{3})[Z]*""".r
   val datePattern3 = """(\d{10})""".r
   val datePattern4 = """(\d{13})""".r
   val format1 = new SimpleDateFormat("dd MMM yyyy HH:mm:ss")
@@ -51,7 +51,7 @@ class MessageTimestamp(timeString: String) extends Ordered[MessageTimestamp] {
     }
     case datePattern2(year, month, day, hour, minute, second, milli) => {
       val cal = Calendar.getInstance()
-      cal.set(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt, second.toInt)
+      cal.set(year.toInt, month.toInt - 1, day.toInt, hour.toInt, minute.toInt, second.toInt)
       cal.set(Calendar.MILLISECOND, milli.toInt)
       time = cal.getTime
     }
