@@ -18,6 +18,10 @@ derby.log
 .manager
 .externalToolBuilders
 
+# eclipse bin folder
+bin
+.cache
+
 # ensime/emacs conf files
 .ensime
 .scala_dependencies
