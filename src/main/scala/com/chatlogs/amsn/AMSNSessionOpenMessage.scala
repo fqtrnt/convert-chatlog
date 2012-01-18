@@ -13,3 +13,15 @@ class AMSNSessionOpenMessage(override val datetime: MessageTimestamp, override v
   override val messageType = MessageType.SYSTEM
   override def toString = "Session open at Datetime: " + datetime + " from: " + from + " text: " + text
 }
+
+object AMSNSessionOpenMessage {
+  val sessionOpen = """\|\"LRED\[Conversation started on \|\"LTIME(\d*)\]""".r
+  val conferenceOpen = """\|\"LRED\[(.*) has entered into a conference on \|\"LTIME(\d*)(.*)\]""".r
+  def unapply(messageLine: String): Option[(MessageTimestamp, String, String)] = {
+    messageLine match {
+      case sessionOpen(time) => Some(time, "", "")
+      case conferenceOpen(from, time, content) => Some(time, from, content)
+      case _ => None
+    }
+  }
+}

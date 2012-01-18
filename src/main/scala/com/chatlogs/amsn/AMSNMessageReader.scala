@@ -44,22 +44,12 @@ class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends M
 
   private def convertMessageFromSource(targetFile: String): List[Message] = {
     // TODO Offline session open
-    val sessionOpen = """\|\"LRED\[Conversation started on \|\"LTIME(\d*)\]""".r
-    val conferenceOpen = """\|\"LRED\[(.*) has entered into a conference on \|\"LTIME(\d*)(.*)\]""".r
-    val chat = """\|\"LGRA\[\|\"LTIME(\d*) \] \|\"LITA(.*) :\|\"LC(\w*) (.*)""".r
-    val transferFile = """\|\"LGRA\|\"LTIME(\d*) \|\"LGRE(.*)""".r
-    val sessionClose = """\|\"LRED\[You have closed the window on (.*)\]""".r
-    val conferenceClose = """\|\"LRED\[(.*) has closed the window on (.*)\]""".r
-    val emptyList = """^\s*$""".r
     Source.fromInputStream(targetFile, Codec.UTF8.name).getLines().flatMap(
       line => line match {
-        case sessionOpen(time) => List(new AMSNSessionOpenMessage(time))
-        case conferenceOpen(from, time, content) => List(new AMSNSessionOpenMessage(time, from, content))
-        case chat(time, from, color, content) => List(new AMSNMessage(time, from, color, content))
-        case transferFile(time, content) => List(new AMSNMessage(time, null, null, content))
-        case sessionClose(time) => List(new AMSNSessionCloseMessage(time))
-        case conferenceClose(from, time) => List(new AMSNSessionCloseMessage(time, from))
-        case emptyList() => List(new AMSNEmptyMessage)
+        case AMSNSessionOpenMessage(time, from, content) => List(new AMSNSessionOpenMessage(time, from, content))
+        case AMSNMessage(time, from, color, content) => List(new AMSNMessage(time, from, color, content))
+        case AMSNSessionCloseMessage(time, from) => List(new AMSNSessionCloseMessage(time, from))
+        case AMSNEmptyMessage(_) => List(new AMSNEmptyMessage)
         case _ => List(new AMSNWrapMessage(line))
       }
     ).toList

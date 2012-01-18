@@ -16,3 +16,13 @@ class AMSNEmptyMessage extends Message {
   override val messageType = MessageType.CHAT
   override def toString = text
 }
+
+object AMSNEmptyMessage {
+  val emptyList = """\s*""".r
+  def unapply(messageLine: String): Option[String] = {
+    messageLine match {
+      case emptyList() => Some("")
+      case _ => None
+    }
+  }
+}
