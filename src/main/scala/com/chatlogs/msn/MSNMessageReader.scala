@@ -15,15 +15,15 @@ import scala.xml.Elem
  * @version 1.0.0
  *
  */
-class MSNMessageReader(folder: String, fileName: String) extends MessageReader {
+class MSNMessageReader extends MessageReader {
 
-  def sessions(): List[Session] = {
+  def read(folder: String, target: String): List[Session] = {
     val doc = XML.load({
-      if (folder.endsWith("/")) folder + fileName
-      else folder + "/" + fileName
+      if (folder.endsWith("/")) folder + target
+      else folder + "/" + target
     })
     val messages: List[MSNMessage] = extractMessage(doc)
-    pack2sessions(messages).sortBy(_.messages(0).datetime)
+    pack2sessions(messages, target).sortBy(_.messages(0).datetime)
   }
 
   private def extractMessage(doc: Elem): List[MSNMessage] = {
@@ -39,13 +39,13 @@ class MSNMessageReader(folder: String, fileName: String) extends MessageReader {
     }
   }
 
-  private def pack2sessions(messages: List[MSNMessage]): List[Session] = {
+  private def pack2sessions(messages: List[MSNMessage], target: String): List[Session] = {
     var sessions: List[Session] = Nil
-    messages.foldLeft (new Session(0, fileName)) {
+    messages.foldLeft (new Session(0, target)) {
       (session, message) =>
         var retSession = session
         if (session.sessionId != message.sessionId) {
-          retSession = new Session(message.sessionId, fileName)
+          retSession = new Session(message.sessionId, target)
           sessions ::= retSession
         }
         retSession + message

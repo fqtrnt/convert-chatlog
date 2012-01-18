@@ -11,18 +11,18 @@ import scala.io.Codec
  * Version: 1.0.0
  */
 
-class AMSNMessageReader(target: String, sessionIdentifier: String= "") extends MessageReader {
-  def sessions(): List[Session] = {
-    val messages = loadMessagesFrom(target.excavate.filter(_.endsWith(sessionIdentifier)).toList)
+class AMSNMessageReader extends MessageReader {
+  def read(folder: String, target: String): List[Session] = {
+    val messages = loadMessagesFrom(folder.excavate.filter(_.endsWith(target)).toList)
     var sessions: List[Session] = Nil
     var sessionId = 0
-    messages.foldLeft (new Session(sessionId, sessionIdentifier)) {
+    messages.foldLeft (new Session(sessionId, target)) {
       (session, message) => {
         var retSession = session
         message match {
           case x: AMSNSessionOpenMessage => {
             sessionId += 1
-            retSession = new Session(sessionId, sessionIdentifier)
+            retSession = new Session(sessionId, target)
             sessions ::= retSession
           }
           case _ => null

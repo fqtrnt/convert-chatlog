@@ -8,5 +8,5 @@ package com.chatlogs.core
  */
 
 trait MessageReader {
-  def sessions(): List[Session]
+  def read(folder: String, target: String): List[Session]
 }

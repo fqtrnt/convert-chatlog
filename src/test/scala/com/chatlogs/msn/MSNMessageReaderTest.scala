@@ -17,8 +17,8 @@ class MSNMessageReaderTest extends Spec with ShouldMatchers {
   describe("MSN Log") {
     val filename = "test2517631239"
     val folder = "./src/test/resources/msn"
-    val messageReader: MessageReader = new MSNMessageReader(folder, filename)
-    val sessions: List[Session] = messageReader.sessions()
+    val messageReader: MessageReader = new MSNMessageReader
+    val sessions: List[Session] = messageReader.read(folder, filename)
     it("should be have one session and two messages in the session") {
       sessions should not be null
       sessions should not be 'empty

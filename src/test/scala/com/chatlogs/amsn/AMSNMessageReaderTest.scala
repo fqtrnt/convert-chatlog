@@ -16,8 +16,8 @@ class AMSNMessageReaderTest extends Spec with ShouldMatchers {
   describe("aMSN log") {
     val sessionIdentifier = "aaa632@hotmail.com.log"
     val folder = "./src/test/resources/amsn/"
-    val messageReader: MessageReader = new AMSNMessageReader(folder, sessionIdentifier)
-    val sessions: List[Session] = messageReader.sessions()
+    val messageReader: MessageReader = new AMSNMessageReader
+    val sessions: List[Session] = messageReader.read(folder, sessionIdentifier)
     it("should only have 3 sessions in folder[" + folder  + "] with file[" + sessionIdentifier + "] and spokesmans are allright") {
       sessions should not be null
       sessions should not be 'empty
