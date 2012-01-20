@@ -15,7 +15,7 @@ import com.chatlogs.core.Session
 class MSNMessageReaderTest extends Spec with ShouldMatchers {
 
   describe("MSN Log") {
-    val filename = "test2517631239"
+    val filename = "test2517631239.xml"
     val folder = "./src/test/resources/msn"
     val messageReader: MessageReader = new MSNMessageReader
     val sessions: List[Session] = messageReader.read(folder, filename)
