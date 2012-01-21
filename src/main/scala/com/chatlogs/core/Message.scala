@@ -14,7 +14,7 @@ trait Message {
   val datetime: MessageTimestamp
   val from: String
   val text: String
-  val color: String
+  val color: Option[String]
   val messageType: MessageType
 
 }
@@ -61,5 +61,6 @@ class MessageTimestamp(timeString: String) extends Ordered[MessageTimestamp] {
   var time: Date = _
 
   override def toString = format2.format(time)
+  def toString(format: String) = new SimpleDateFormat(format).format(time)
   def compare(that: MessageTimestamp) = if (null == that) 1 else this.time.compareTo(that.time)
 }

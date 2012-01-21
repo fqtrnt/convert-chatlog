@@ -62,7 +62,7 @@ class AMSNMessageReader extends MessageReader {
         curr match {
           case _: AMSNWrapMessage | _: AMSNEmptyMessage => {
             last match {
-              case z: AMSNSessionCloseMessage => new AMSNSessionCloseMessage(z.datetime, z.from, z.color, z.text + curr.text)
+              case z: AMSNSessionCloseMessage => new AMSNSessionCloseMessage(z.datetime, z.from, z.text + curr.text)
               case z: AMSNMessage => new AMSNMessage(z.datetime, z.from, z.color, z.text + curr.text)
               case _ => curr
             }

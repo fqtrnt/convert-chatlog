@@ -8,7 +8,8 @@ import com.chatlogs.core.{MessageType, Message, MessageTimestamp}
  * Version: 1.0.0
  */
 
-class AMSNSessionCloseMessage(override val datetime: MessageTimestamp, override val from: String = "", override val color: String = "", override val text: String = "") extends Message {
+class AMSNSessionCloseMessage(override val datetime: MessageTimestamp, override val from: String = "",  override val text: String = "") extends Message {
+  override val color: Option[String] = None
   override val messageType = MessageType.SYSTEM
   override def toString = "Session close at Datetime: " + datetime + " from: " + from + " text: " + text
 }

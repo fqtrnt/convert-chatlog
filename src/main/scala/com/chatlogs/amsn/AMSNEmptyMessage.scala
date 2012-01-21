@@ -11,7 +11,7 @@ import com.chatlogs.core.{MessageTimestamp, MessageType, Message}
 class AMSNEmptyMessage extends Message {
   override val datetime = new MessageTimestamp(null)
   override val from = ""
-  override val color = ""
+  override val color = None
   override val text = "\n"
   override val messageType = MessageType.CHAT
   override def toString = text

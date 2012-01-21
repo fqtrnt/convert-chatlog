@@ -9,7 +9,7 @@ import com.chatlogs.core.{MessageType, Message, MessageTimestamp}
  */
 
 class AMSNSessionOpenMessage(override val datetime: MessageTimestamp, override val from: String = "", override val text: String = "") extends Message {
-  override val color: String = null
+  override val color: Option[String] = None
   override val messageType = MessageType.SYSTEM
   override def toString = "Session open at Datetime: " + datetime + " from: " + from + " text: " + text
 }

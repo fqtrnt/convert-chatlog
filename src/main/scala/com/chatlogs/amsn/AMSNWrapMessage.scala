@@ -11,7 +11,7 @@ import com.chatlogs.core.{MessageType, MessageTimestamp, Message}
 class AMSNWrapMessage(val content: String) extends Message {
   override val datetime: MessageTimestamp = new MessageTimestamp(null)
   override val from: String = "";
-  override val color: String = "";
+  override val color: Option[String] = None;
   override val text: String = "\n" + content
   override val messageType = MessageType.CHAT
   override def toString = text

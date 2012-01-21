@@ -15,11 +15,11 @@ import com.chatlogs.core.MessageType
 class MSNMessage(override val datetime: MessageTimestamp, override val from: String,
                  val to: String, val style: String, override val text: String, val sessionId: Int,
                  override val messageType: MessageType = MessageType.CHAT) extends Message {
-  override val color: String = {
+  override val color: Option[String] = {
     val colorPattern = """.*color:#([0-9A-Fa-f]*).*""".r
     style match {
-      case colorPattern(color) => color
-      case _ => ""
+      case colorPattern(color) => Some(color)
+      case _ => None
     }
   }
 
