@@ -6,7 +6,7 @@ package com.chatlogs.core
  * Version: 1.0.0
  */
 
-class Session(val sessionId: Int, val identifier: String) {
+class Session(var sessionId: Int, val identifier: String) {
   var messages: List[Message] = Nil
 
   def interlocutor: Interlocutor = messages.foldLeft(new Interlocutor) {

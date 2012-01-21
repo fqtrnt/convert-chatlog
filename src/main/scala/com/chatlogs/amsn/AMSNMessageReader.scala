@@ -21,7 +21,6 @@ class AMSNMessageReader extends MessageReader {
         var retSession = session
         message match {
           case x: AMSNSessionOpenMessage => {
-            sessionId += 1
             retSession = new Session(sessionId, target)
             sessions ::= retSession
           }
@@ -30,7 +29,12 @@ class AMSNMessageReader extends MessageReader {
         retSession + message
       }
     }
-    sessions.sortBy(_.messages(0).datetime)
+    sessions.sortBy(_.messages(0).datetime).map({
+      session =>
+        sessionId += 1
+        session.sessionId = sessionId
+        session
+    })
   }
 
   private def loadMessagesFrom(filePaths: List[String]): List[Message] = {
