@@ -9,6 +9,7 @@ import com.chatlogs.core.Session
 import scala.xml.XML
 import com.chatlogs.core.Message
 import scala.xml.Elem
+import scala.xml.Node
 
 /**
  * @author fqtrnt [2012/01/16]
@@ -27,16 +28,31 @@ class MSNMessageReader extends MessageReader {
   }
 
   private def extractMessage(doc: Elem): List[MSNMessage] = {
-    (List[MSNMessage]() /: (doc \ "Message")) {
+    var messages = (List[MSNMessage]() /: (doc \ "Message")) {
       (list, node) =>
-        val datetime = (node \ "@DateTime").toString
-        val from = (node \ "From" \ "User" \ "@FriendlyName").toString
         val to = (node \ "To" \ "User" \ "@FriendlyName").toString
-        val style = (node \ "Text" \ "@Style").toString
-        val text = (node \ "Text").text
-        val sessionId = (node \ "@SessionID").toString.toInt
+        val (datetime, from, style, text, sessionId) = fetchBaseXmlValue(node)
         new MSNMessage(datetime, from, to, style, text, sessionId) +: list
     }
+    messages = (messages /: ((doc \ "Invitation") ++ (doc \ "InvitationResponse"))) {
+      (list, node) =>
+        val file = (node \ "File").text
+        val (datetime, from, style, text, sessionId) = fetchBaseXmlValue(node)
+        node.label match {
+          case "Invitation" => new Invitation(datetime, from, file, style, text, sessionId) +: list
+          case "InvitationResponse" => new InvitationResponse(datetime, from, file, style, text, sessionId) +: list
+        }
+    }
+    messages.sortBy(_.sessionId)
+  }
+
+  private def fetchBaseXmlValue(node: Node): (String, String, String, String, Int) = {
+    val datetime = (node \ "@DateTime").toString
+    val from = (node \ "From" \ "User" \ "@FriendlyName").toString
+    val style = (node \ "Text" \ "@Style").toString
+    val text = (node \ "Text").text
+    val sessionId = (node \ "@SessionID").toString.toInt
+    (datetime, from, style, text, sessionId)
   }
 
   private def pack2sessions(messages: List[MSNMessage], target: String): List[Session] = {
