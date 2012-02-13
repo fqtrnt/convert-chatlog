@@ -15,6 +15,7 @@ import java.io.FileOutputStream
 import scala.util.control.Exception.ultimately
 import scala.xml.Utility
 import scala.xml.Node
+import com.chatlogs.core.Message
 
 /**
  * @author fqtrnt [2012/01/19]
@@ -32,34 +33,36 @@ class MSNMessageWriter extends MessageWriter {
   }
 
   def createXMLFrom(session: Session) = {
+    val defatulTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    def textStyle(x: Message) = "font-family:Microsoft YaHei; color:#" + x.color.getOrElse("000000") + "; "
     session.messages map({
       message => message.messageType match {
         case x: Invitation => 
-          <Invitation DateTime={x.datetime.toString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")}
+          <Invitation DateTime={x.datetime.toString(defatulTimeFormat)}
                    SessionID={session.sessionId.toString}
                    Date={x.datetime.toString("yyyy/MM/dd")}
                    Time={x.datetime.toString("HH:mm:ss")}>
           <From><User FriendlyName={x.from}/></From>
           <File>{x.file}</File>
-          <Text Style={"font-family:Microsoft YaHei; color:#" + x.color.getOrElse("000000") + "; "}>{x.text}</Text>
+          <Text Style={textStyle(x)}>{x.text}</Text>
           </Invitation>
         case x: InvitationResponse => 
-          <InvitationResponse DateTime={x.datetime.toString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")}
+          <InvitationResponse DateTime={x.datetime.toString(defatulTimeFormat)}
                    SessionID={session.sessionId.toString}
                    Date={x.datetime.toString("yyyy/MM/dd")}
                    Time={x.datetime.toString("HH:mm:ss")}>
           <From><User FriendlyName={x.from}/></From>
           <File>{x.file}</File>
-          <Text Style={"font-family:Microsoft YaHei; color:#" + x.color.getOrElse("000000") + "; "}>{x.text}</Text>
+          <Text Style={textStyle(x)}>{x.text}</Text>
           </InvitationResponse>
         case MessageType.CHAT =>
-          <Message DateTime={message.datetime.toString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")}
+          <Message DateTime={message.datetime.toString(defatulTimeFormat)}
                    SessionID={session.sessionId.toString}
                    Date={message.datetime.toString("yyyy/MM/dd")}
                    Time={message.datetime.toString("HH:mm:ss")}>
           <From><User FriendlyName={message.from}/></From>
           <To><User FriendlyName={session.interlocutor.listeners(message.from).mkString(",")}/></To>
-          <Text Style={"font-family:Microsoft YaHei; color:#" + message.color.getOrElse("000000") + "; "}>{message.text}</Text>
+          <Text Style={textStyle(message)}>{message.text}</Text>
           </Message>
         case _ =>
       }
