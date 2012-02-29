@@ -80,6 +80,6 @@ class MSNMessageWriter extends MessageWriter {
   def write(w: java.io.Writer, node: Node): Unit = {
     w.write("<?xml version='1.0' encoding='" + Codec.UTF8.name + "'?>\n")
     w.write("<?xml-stylesheet type='text/xsl' href='MessageLog.xsl'?>\n")
-    w.write(Utility.toXML(node).toString)
+    w.write(Utility.trim(node).toString)
   }
 }
